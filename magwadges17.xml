@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>/home/mark25/MAGWadges17/magwadges17.sch</source>
+    <date>Thu 27 Apr 2017 01:24:43 PM EDT</date>
+    <tool>Eeschema 4.0.6</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>magwadges17.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="BT1">
+      <value>Battery_Cell</value>
+      <footprint>custom:S8211-45R</footprint>
+      <libsource lib="device" part="Battery_Cell"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBB445</tstamp>
+    </comp>
+    <comp ref="LS1">
+      <value>Speaker_Crystal</value>
+      <footprint>custom:PS1740P02CE</footprint>
+      <libsource lib="device" part="Speaker_Crystal"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBC0DA</tstamp>
+    </comp>
+    <comp ref="J2">
+      <value>JACK_2P</value>
+      <footprint>custom:SJ-252X-SMT</footprint>
+      <libsource lib="conn" part="JACK_2P"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBC15C</tstamp>
+    </comp>
+    <comp ref="D1">
+      <value>LED</value>
+      <footprint>custom:LTST-C230KRKT</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBCC42</tstamp>
+    </comp>
+    <comp ref="D4">
+      <value>LED</value>
+      <footprint>custom:LTST-C230KRKT</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBCC7B</tstamp>
+    </comp>
+    <comp ref="D2">
+      <value>LED</value>
+      <footprint>custom:LTST-C230KRKT</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBD529</tstamp>
+    </comp>
+    <comp ref="D3">
+      <value>LED</value>
+      <footprint>custom:LTST-C230KRKT</footprint>
+      <libsource lib="device" part="LED"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBD54E</tstamp>
+    </comp>
+    <comp ref="Q2">
+      <value>BC846BDW1</value>
+      <footprint>TO_SOT_Packages_SMD:SOT-363_SC-70-6</footprint>
+      <libsource lib="transistors" part="BC846BDW1"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBD5D1</tstamp>
+    </comp>
+    <comp ref="Q1">
+      <value>BC846BDW1</value>
+      <footprint>TO_SOT_Packages_SMD:SOT-363_SC-70-6</footprint>
+      <libsource lib="transistors" part="BC846BDW1"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBD670</tstamp>
+    </comp>
+    <comp ref="J1">
+      <value>CONN_02X03</value>
+      <footprint>Pin_Headers:Pin_Header_Straight_2x03_Pitch2.54mm_SMD</footprint>
+      <libsource lib="conn" part="CONN_02X03"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBD761</tstamp>
+    </comp>
+    <comp ref="U2">
+      <value>FT25H16</value>
+      <footprint>Housings_SOIC:SOIC-8_3.9x4.9mm_Pitch1.27mm</footprint>
+      <libsource lib="magwadges17-cache" part="FT25H16"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBDD72</tstamp>
+    </comp>
+    <comp ref="S1">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBE22E</tstamp>
+    </comp>
+    <comp ref="S2">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBE28D</tstamp>
+    </comp>
+    <comp ref="S4">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBE311</tstamp>
+    </comp>
+    <comp ref="R6">
+      <value>2K2</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBEE2F</tstamp>
+    </comp>
+    <comp ref="R7">
+      <value>2K2</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBEE8E</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>47</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBF58F</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>47</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBF5DE</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>ATTINY2313-20MU</value>
+      <footprint>Housings_DFN_QFN:QFN-20-1EP_4x4mm_Pitch0.5mm</footprint>
+      <libsource lib="atmel" part="ATTINY2313-20MU"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC1619</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>1K</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC64D2</tstamp>
+    </comp>
+    <comp ref="R4">
+      <value>1M</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC6521</tstamp>
+    </comp>
+    <comp ref="R5">
+      <value>1M</value>
+      <footprint>Resistors_SMD:R_0805</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC656C</tstamp>
+    </comp>
+    <comp ref="S3">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FBE2CE</tstamp>
+    </comp>
+    <comp ref="S8">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC28A3</tstamp>
+    </comp>
+    <comp ref="S7">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC28A9</tstamp>
+    </comp>
+    <comp ref="S5">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC28AF</tstamp>
+    </comp>
+    <comp ref="S6">
+      <value>SW_SPST</value>
+      <footprint>custom:PTS645</footprint>
+      <libsource lib="magwadges17-cache" part="SW_SPST"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC28B5</tstamp>
+    </comp>
+    <comp ref="D5">
+      <value>D</value>
+      <footprint>Diodes_SMD:D_1206</footprint>
+      <libsource lib="device" part="D"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC28DA</tstamp>
+    </comp>
+    <comp ref="D6">
+      <value>D</value>
+      <footprint>Diodes_SMD:D_1206</footprint>
+      <libsource lib="device" part="D"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC29D3</tstamp>
+    </comp>
+    <comp ref="D7">
+      <value>D</value>
+      <footprint>Diodes_SMD:D_1206</footprint>
+      <libsource lib="device" part="D"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>58FC2A26</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="atmel" part="ATTINY2313-20MU">
+      <description>MLF20, 2k Flash, 128B SRAM, 128B EEPROM, Debug Wire</description>
+      <docs>http://www.atmel.com/Images/doc2543.pdf</docs>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">ATTINY2313-20MU</field>
+        <field name="Footprint">MLF20</field>
+      </fields>
+      <pins>
+        <pin num="1" name="(TXD)PD1" type="BiDi"/>
+        <pin num="2" name="PA1(XTAL2)" type="input"/>
+        <pin num="3" name="PA0(XTAL1)" type="input"/>
+        <pin num="4" name="(CKOUT/XCK/INT0)PD2" type="BiDi"/>
+        <pin num="5" name="(INT1)PD3" type="BiDi"/>
+        <pin num="6" name="(T0)PD4" type="BiDi"/>
+        <pin num="7" name="(OC0B/T1)PD5" type="BiDi"/>
+        <pin num="8" name="GND" type="power_in"/>
+        <pin num="9" name="(ICP)PD6" type="BiDi"/>
+        <pin num="10" name="(PCINT0/AIN0)PB0" type="BiDi"/>
+        <pin num="11" name="(PCINT1/AIN1)PB1" type="BiDi"/>
+        <pin num="12" name="(PCINT2/OC0A)PB2" type="BiDi"/>
+        <pin num="13" name="(PCINT3/OC1A)PB3" type="BiDi"/>
+        <pin num="14" name="(PCINT4/OC1B)PB4" type="BiDi"/>
+        <pin num="15" name="(PCINT5/MOSI/DI/SDA)PB5" type="BiDi"/>
+        <pin num="16" name="(PCINT6/MISO/DO)PB6" type="BiDi"/>
+        <pin num="17" name="(PCINT7/USCK/SCK/SCL)PB7" type="BiDi"/>
+        <pin num="18" name="VCC" type="power_in"/>
+        <pin num="19" name="PA2(~RESET~/dW)" type="input"/>
+        <pin num="20" name="(RXD)PD0" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="transistors" part="BC846BS">
+      <aliases>
+        <alias>BC846BDW1</alias>
+        <alias>BC847BS</alias>
+        <alias>BC847BDW1</alias>
+        <alias>PMBT2222AYS</alias>
+        <alias>MMDT2222A</alias>
+        <alias>MBT2222ADW1T1</alias>
+        <alias>FFB2222A</alias>
+        <alias>PMBT3904YS</alias>
+        <alias>MMDT3904</alias>
+        <alias>MBT3904DW1</alias>
+        <alias>FFB3904</alias>
+        <alias>MMDT5551</alias>
+        <alias>FFB5551</alias>
+      </aliases>
+      <description>65V Vce, 100mA IC, Dual NPN/NPN Transistors, SOT-363</description>
+      <docs>http://www.nxp.com/documents/data_sheet/BC846BS.pdf</docs>
+      <footprints>
+        <fp>SC?70*</fp>
+        <fp>SC?88*</fp>
+        <fp>SOT?363*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">Q</field>
+        <field name="Value">BC846BS</field>
+        <field name="Footprint">TO_SOT_Packages_SMD:SOT-363</field>
+      </fields>
+      <pins>
+        <pin num="1" name="E1" type="passive"/>
+        <pin num="2" name="B1" type="input"/>
+        <pin num="3" name="C2" type="passive"/>
+        <pin num="4" name="E2" type="passive"/>
+        <pin num="5" name="B2" type="input"/>
+        <pin num="6" name="C1" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="Battery_Cell">
+      <description>single battery cell</description>
+      <fields>
+        <field name="Reference">BT</field>
+        <field name="Value">Battery_Cell</field>
+      </fields>
+      <pins>
+        <pin num="1" name="+" type="passive"/>
+        <pin num="2" name="-" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_02X03">
+      <description>Connector, double row, 02x03, pin header</description>
+      <footprints>
+        <fp>Pin_Header_Straight_2X*</fp>
+        <fp>Pin_Header_Angled_2X*</fp>
+        <fp>Socket_Strip_Straight_2X*</fp>
+        <fp>Socket_Strip_Angled_2X*</fp>
+        <fp>IDC_Header_Straight_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">CONN_02X03</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+        <pin num="5" name="P5" type="passive"/>
+        <pin num="6" name="P6" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="D">
+      <description>Diode</description>
+      <footprints>
+        <fp>TO-???*</fp>
+        <fp>*SingleDiode</fp>
+        <fp>*_Diode_*</fp>
+        <fp>*SingleDiode*</fp>
+        <fp>D_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">D</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="magwadges17-cache" part="FT25H16">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">FT25H16</field>
+      </fields>
+      <pins>
+        <pin num="1" name="CS#" type="input"/>
+        <pin num="2" name="SO" type="BiDi"/>
+        <pin num="3" name="WP#" type="BiDi"/>
+        <pin num="4" name="VSS" type="power_in"/>
+        <pin num="5" name="SI" type="BiDi"/>
+        <pin num="6" name="SCLK" type="input"/>
+        <pin num="7" name="HOLD#" type="BiDi"/>
+        <pin num="8" name="VCC" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="JACK_2P">
+      <description>2-pin Mono audio Jack, withc switch contact</description>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">JACK_2P</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+        <pin num="3" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="LED">
+      <description>LED generic</description>
+      <footprints>
+        <fp>LED*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">LED</field>
+      </fields>
+      <pins>
+        <pin num="1" name="K" type="passive"/>
+        <pin num="2" name="A" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="magwadges17-cache" part="SW_SPST">
+      <fields>
+        <field name="Reference">S</field>
+        <field name="Value">SW_SPST</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="BiDi"/>
+        <pin num="2" name="~" type="BiDi"/>
+        <pin num="3" name="~" type="BiDi"/>
+        <pin num="4" name="~" type="BiDi"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="Speaker_Crystal">
+      <aliases>
+        <alias>Speaker_Ultrasound</alias>
+      </aliases>
+      <description>crystal speaker/transducer</description>
+      <fields>
+        <field name="Reference">LS</field>
+        <field name="Value">Speaker_Crystal</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="input"/>
+        <pin num="2" name="2" type="input"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="atmel">
+      <uri>/usr/share/kicad/library/atmel.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>/usr/share/kicad/library/device.lib</uri>
+    </library>
+    <library logical="transistors">
+      <uri>/usr/share/kicad/library/transistors.lib</uri>
+    </library>
+    <library logical="magwadges17-cache">
+      <uri>/home/mark25/MAGWadges17/magwadges17-cache.lib</uri>
+    </library>
+    <library logical="conn">
+      <uri>/usr/share/kicad/library/conn.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(U1-Pad10)">
+      <node ref="U1" pin="10"/>
+      <node ref="U2" pin="1"/>
+    </net>
+    <net code="2" name="Net-(U1-Pad11)">
+      <node ref="U1" pin="11"/>
+      <node ref="U2" pin="7"/>
+    </net>
+    <net code="3" name="Net-(J1-Pad3)">
+      <node ref="J1" pin="3"/>
+      <node ref="U2" pin="6"/>
+      <node ref="U1" pin="17"/>
+    </net>
+    <net code="4" name="Net-(U1-Pad12)">
+      <node ref="U2" pin="3"/>
+      <node ref="U1" pin="12"/>
+    </net>
+    <net code="5" name="Net-(J1-Pad4)">
+      <node ref="U2" pin="5"/>
+      <node ref="J1" pin="4"/>
+      <node ref="U1" pin="15"/>
+    </net>
+    <net code="6" name="Net-(J1-Pad1)">
+      <node ref="J1" pin="1"/>
+      <node ref="U2" pin="2"/>
+      <node ref="U1" pin="16"/>
+    </net>
+    <net code="7" name="Net-(S6-Pad2)">
+      <node ref="S6" pin="2"/>
+    </net>
+    <net code="8" name="Net-(D7-Pad2)">
+      <node ref="S8" pin="3"/>
+      <node ref="D7" pin="2"/>
+      <node ref="S7" pin="3"/>
+    </net>
+    <net code="9" name="Net-(D5-Pad2)">
+      <node ref="S2" pin="3"/>
+      <node ref="S3" pin="3"/>
+      <node ref="D5" pin="2"/>
+      <node ref="S1" pin="3"/>
+    </net>
+    <net code="10" name="Net-(S6-Pad4)">
+      <node ref="S6" pin="4"/>
+    </net>
+    <net code="11" name="Net-(D6-Pad2)">
+      <node ref="S4" pin="3"/>
+      <node ref="S5" pin="3"/>
+      <node ref="D6" pin="2"/>
+      <node ref="S6" pin="3"/>
+    </net>
+    <net code="12" name="Net-(Q1-Pad1)">
+      <node ref="Q1" pin="5"/>
+      <node ref="Q1" pin="1"/>
+    </net>
+    <net code="13" name="Net-(S5-Pad4)">
+      <node ref="S5" pin="4"/>
+    </net>
+    <net code="14" name="Net-(S5-Pad2)">
+      <node ref="S5" pin="2"/>
+    </net>
+    <net code="15" name="Net-(S7-Pad4)">
+      <node ref="S7" pin="4"/>
+    </net>
+    <net code="16" name="Net-(S7-Pad2)">
+      <node ref="S7" pin="2"/>
+    </net>
+    <net code="17" name="Net-(Q2-Pad1)">
+      <node ref="Q2" pin="1"/>
+      <node ref="Q2" pin="5"/>
+    </net>
+    <net code="18" name="Net-(Q1-Pad3)">
+      <node ref="Q1" pin="3"/>
+      <node ref="Q1" pin="6"/>
+      <node ref="U1" pin="14"/>
+      <node ref="R6" pin="2"/>
+    </net>
+    <net code="19" name="Net-(D5-Pad1)">
+      <node ref="D5" pin="1"/>
+      <node ref="S7" pin="1"/>
+      <node ref="U1" pin="9"/>
+      <node ref="S4" pin="1"/>
+    </net>
+    <net code="20" name="Net-(D6-Pad1)">
+      <node ref="S1" pin="1"/>
+      <node ref="D6" pin="1"/>
+      <node ref="S8" pin="1"/>
+      <node ref="U1" pin="7"/>
+    </net>
+    <net code="21" name="Net-(R2-Pad1)">
+      <node ref="R2" pin="1"/>
+      <node ref="U1" pin="1"/>
+    </net>
+    <net code="22" name="Net-(R1-Pad1)">
+      <node ref="R1" pin="1"/>
+      <node ref="U1" pin="4"/>
+    </net>
+    <net code="23" name="Net-(Q2-Pad3)">
+      <node ref="U1" pin="20"/>
+      <node ref="R7" pin="2"/>
+      <node ref="Q2" pin="3"/>
+      <node ref="Q2" pin="6"/>
+    </net>
+    <net code="24" name="TouchB">
+      <node ref="R5" pin="2"/>
+      <node ref="U1" pin="3"/>
+    </net>
+    <net code="25" name="TouchA">
+      <node ref="U1" pin="2"/>
+      <node ref="R4" pin="2"/>
+    </net>
+    <net code="26" name="reset">
+      <node ref="R3" pin="2"/>
+      <node ref="U1" pin="19"/>
+      <node ref="J1" pin="5"/>
+    </net>
+    <net code="27" name="Net-(J2-Pad2)">
+      <node ref="U1" pin="13"/>
+      <node ref="LS1" pin="1"/>
+      <node ref="J2" pin="3"/>
+      <node ref="J2" pin="2"/>
+    </net>
+    <net code="28" name="Net-(D7-Pad1)">
+      <node ref="S2" pin="1"/>
+      <node ref="S5" pin="1"/>
+      <node ref="D7" pin="1"/>
+      <node ref="U1" pin="6"/>
+    </net>
+    <net code="29" name="Net-(S3-Pad1)">
+      <node ref="U1" pin="5"/>
+      <node ref="S3" pin="1"/>
+      <node ref="S6" pin="1"/>
+    </net>
+    <net code="30" name="Net-(S1-Pad4)">
+      <node ref="S1" pin="4"/>
+    </net>
+    <net code="31" name="Net-(S4-Pad4)">
+      <node ref="S4" pin="4"/>
+    </net>
+    <net code="32" name="Net-(S4-Pad2)">
+      <node ref="S4" pin="2"/>
+    </net>
+    <net code="33" name="Net-(S2-Pad4)">
+      <node ref="S2" pin="4"/>
+    </net>
+    <net code="34" name="Net-(S2-Pad2)">
+      <node ref="S2" pin="2"/>
+    </net>
+    <net code="35" name="Net-(S1-Pad2)">
+      <node ref="S1" pin="2"/>
+    </net>
+    <net code="36" name="GND">
+      <node ref="U1" pin="8"/>
+      <node ref="J2" pin="1"/>
+      <node ref="Q2" pin="4"/>
+      <node ref="D2" pin="1"/>
+      <node ref="D1" pin="1"/>
+      <node ref="LS1" pin="2"/>
+      <node ref="Q1" pin="4"/>
+      <node ref="U2" pin="4"/>
+      <node ref="J1" pin="6"/>
+      <node ref="BT1" pin="2"/>
+    </net>
+    <net code="37" name="Net-(D3-Pad2)">
+      <node ref="Q1" pin="2"/>
+      <node ref="D3" pin="2"/>
+    </net>
+    <net code="38" name="Net-(D2-Pad2)">
+      <node ref="D2" pin="2"/>
+      <node ref="R2" pin="2"/>
+    </net>
+    <net code="39" name="Net-(D4-Pad2)">
+      <node ref="D4" pin="2"/>
+      <node ref="Q2" pin="2"/>
+    </net>
+    <net code="40" name="Net-(D1-Pad2)">
+      <node ref="D1" pin="2"/>
+      <node ref="R1" pin="2"/>
+    </net>
+    <net code="41" name="VCC">
+      <node ref="R7" pin="1"/>
+      <node ref="BT1" pin="1"/>
+      <node ref="U2" pin="8"/>
+      <node ref="R6" pin="1"/>
+      <node ref="R4" pin="1"/>
+      <node ref="R3" pin="1"/>
+      <node ref="J1" pin="2"/>
+      <node ref="U1" pin="18"/>
+      <node ref="R5" pin="1"/>
+      <node ref="D3" pin="1"/>
+      <node ref="D4" pin="1"/>
+    </net>
+    <net code="42" name="Net-(S8-Pad4)">
+      <node ref="S8" pin="4"/>
+    </net>
+    <net code="43" name="Net-(S8-Pad2)">
+      <node ref="S8" pin="2"/>
+    </net>
+    <net code="44" name="Net-(S3-Pad4)">
+      <node ref="S3" pin="4"/>
+    </net>
+    <net code="45" name="Net-(S3-Pad2)">
+      <node ref="S3" pin="2"/>
+    </net>
+  </nets>
+</export>
