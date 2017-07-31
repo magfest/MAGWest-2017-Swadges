@@ -359,11 +359,11 @@ Text GLabel 3400 4500 1    60   Input ~ 0
 SW_D
 Text GLabel 2200 4500 1    60   Input ~ 0
 SW_E
-Text GLabel 1650 4000 1    60   Input ~ 0
+Text GLabel 1900 4500 1    60   Input ~ 0
 SW_F
-Text GLabel 1800 3950 1    60   Input ~ 0
+Text GLabel 1600 4500 1    60   Input ~ 0
 SW_G
-Text GLabel 1450 4050 1    60   Input ~ 0
+Text GLabel 1300 4500 1    60   Input ~ 0
 SW_H
 Wire Wire Line
 	3400 4600 3400 4500

@@ -307,9 +307,9 @@ Text GLabel 5200 1550 2    60   Input ~ 0
 SW_D
 Text GLabel 5200 1650 2    60   Input ~ 0
 SW_E
-Text GLabel 5200 2550 2    60   Input ~ 0
+Text GLabel 5750 3200 0    60   Input ~ 0
 SW_F
-Text GLabel 5200 2650 2    60   Input ~ 0
+Text GLabel 5150 2450 2    60   Input ~ 0
 SW_G
 Text GLabel 5200 2750 2    60   Input ~ 0
 SW_H
@@ -449,9 +449,9 @@ Wire Wire Line
 Wire Wire Line
 	5200 1950 5150 1950
 Wire Wire Line
-	5150 2550 5200 2550
+	5150 2550 7150 2550
 Wire Wire Line
-	5200 2650 5150 2650
+	7250 2650 5150 2650
 Wire Wire Line
 	5150 2750 5200 2750
 Wire Wire Line
@@ -473,9 +473,7 @@ Wire Wire Line
 Wire Wire Line
 	5850 2250 5150 2250
 Wire Wire Line
-	5150 2450 7250 2450
-Wire Wire Line
-	7250 2450 7250 2050
+	7250 2050 7250 2650
 Wire Wire Line
 	7250 2050 7900 2050
 $Comp
@@ -522,9 +520,10 @@ F 3 "" H 2000 2150 50  0001 C CNN
 	1    2000 2150
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7800 3050 5750 3050
-Connection ~ 5750 3050
 Text GLabel 7750 5250 3    60   Input ~ 0
 reset
+Wire Wire Line
+	7150 2550 7150 3050
+Wire Wire Line
+	7150 3050 7800 3050
 $EndSCHEMATC
