@@ -92,27 +92,6 @@ uint8_t Sine( uint16_t w ) { w>>=3; if( w & 0x100 ) return 255-(w&0xff); else re
 uint8_t nextocr1d;
 
 
-ISR( TIMER1_COMPD_vect, ISR_NAKED )
-{
-/*	if( !(nextocr1d & 0x80)  )
-	{
-		TouchNext();
-	} */
-	asm volatile ( "\n"
-"		push r0\n"
-"		in r0, 0x3f\n"
-"		push r0\n"
-"		push r24\n"
-"		lds r24, nextocr1d\n"
-"		sbrs r24, 7\n"
-"		rcall TouchNext\n"
-"		pop r24\n"
-"		pop r0\n"
-"		out 0x3f, r0\n"
-"		pop r0\n"
-"		reti\n" );
-}
-
 ISR( TIMER1_OVF_vect, ISR_NAKED )
 {
 	asm volatile ( "\n"
@@ -122,10 +101,11 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 "		push r24\n"
 "		push r25\n" );
 	OCR1D = nextocr1d;
-	if( nextocr1d & 0x80 )
+	if( nextocr1d & 0x80 )  //Cannot safely operate unless the next is far enough out.
 	{
 		TouchNext();
 	}
+
 	//if( mute ) { TouchNext(); return; }
 	//goto cleanup;
 	//sei();
@@ -188,7 +168,7 @@ int main()
 
 //	PLLCSR = _BV(PCKE) | _BV(PLLE); //Enable PLL - makes max speed 263.7kHz.  WARNING: Adds ~4mA.
 	PLLCSR = 0; //Don't use PLL. - max speed 33.35kHz
-	TIMSK |= _BV(TOIE1) | _BV(OCIE1D); //Enable overflow interrupt. as well as the D-match interrupt.
+	TIMSK |= _BV(TOIE1);// | _BV(OCIE1D); //Enable overflow interrupt. as well as the D-match interrupt.
 
 //	sfreq = 150;
 
