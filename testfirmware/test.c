@@ -22,7 +22,7 @@ TODO:
 #include "touch.h"
 
 //#define BRIDGE_MODE  //Uses a lot more power but is louder.
-#define USE_SPI
+//#define USE_SPI
 
 void delay_ms(uint32_t time) {
   uint32_t i;
@@ -101,7 +101,7 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 "		push r24\n"
 "		push r25\n" );
 	OCR1D = nextocr1d;
-	if( nextocr1d & 0x80 )  //Cannot safely operate unless the next is far enough out.
+	if( mute || (OCR1D & 0x80) )  //Cannot safely operate unless the next is far enough out.
 	{
 		TouchNext();
 	}
@@ -129,7 +129,7 @@ cleanup:
 int main()
 {
 	unsigned char i;
-	unsigned short s1, s2, s3, s4, s5;
+	int8_t s1, s2, s3, s4, s5;
 	
 	DDRB = 3;  //LEDs output
 
@@ -192,7 +192,7 @@ int main()
 #endif
 
 //Debug for checking to see if touch is working in the synchronized manner.
-#if 1
+#if 0
 #ifdef USE_SPI
 	while(1)
 	{
@@ -254,15 +254,10 @@ int main()
 
 		if( sfreq == 0 ) mute = 1; else mute = 0;
 
-/*
-		s1 = GetTime( 5 );
-		_delay_us(1000);
-		s2 = GetTime( 6 );
-		_delay_us(1000);
-		s3 = GetTime( 7 );
-		_delay_us(1000);
+		s1 = (int8_t)touchvals[0] - 0x10;
+		s2 = (int8_t)touchvals[1] - 0x10;
+		s3 = (int8_t)touchvals[2] - 0x10;
 
-/*
 		if( s1 > 5)
 			sfoverride = 150;
 		else if( s2 > 5 )
@@ -271,17 +266,10 @@ int main()
 			sfoverride = 170;
 		else
 			sfoverride = 0;
-*/
 
-//		sendhex2(s1);
-//		sendchr(10);
 
-/*		s2 = GetTime( 6 );
-		_delay_us(1000);
-		s3 = GetTime( 7 );
-		_delay_us(1000);
 /*
-
+		
 		int maximumtouch = 0;
 		int angle = 0;
 
@@ -346,7 +334,6 @@ int main()
 			sfoverride = 0;
 		}
 */
-
 /*
 		sleep_enable();
 		sleep_cpu();
