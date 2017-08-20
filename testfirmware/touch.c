@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "touch.h"
 
 volatile unsigned char TimerAtTrigger;
 
@@ -8,9 +9,8 @@ volatile unsigned char TimerAtTrigger;
 //";		pop r0 \n"
 //";		out 0x3f, r0\n"
 
-#define FAST_ISR
 
-#ifdef FAST_ISR
+#ifdef FAST_TOUCH_ISR
 
 ISR( PCINT_vect, ISR_NAKED )
 {
@@ -18,6 +18,9 @@ ISR( PCINT_vect, ISR_NAKED )
 "		push r24 \n"
 "		in	r24, %[tcnt1]\n"
 "		sts TimerAtTrigger, r24\n"
+"		in  r24, %[gimsk]\n"
+"		andi r24, ~(1<<5)\n"
+"		out %[gimsk], r24\n"
 "		pop r24 \n"
 "		reti \n"
 	: 
@@ -28,7 +31,7 @@ ISR( PCINT_vect, ISR_NAKED )
 ISR( PCINT_vect )
 {
 	TimerAtTrigger = TCNT1; //Interrupts only happen every other cycle anyway.
-	GIFR |= _BV(5);
+	//GIFR |= _BV(5);
 	GIMSK &= ~_BV(5);     //Turn interrupt back off.
 }
 #endif
@@ -82,10 +85,10 @@ unsigned char TouchTest( unsigned char pin, unsigned char mask )
 }
 */
 
-#if 0
+#ifndef USE_ASM_TOUCH
 
 #define TTGEN(pin) \
-unsigned char TouchTest##pin( uint8_t mask ) \
+uint8_t TouchTest##pin( ) \
 { \
 	unsigned char ret = 0; \
 	unsigned char initialt1; \
@@ -94,7 +97,7 @@ unsigned char TouchTest##pin( uint8_t mask ) \
 	DDRA &= ~_BV(pin);		/*Release the pin to float high. */ \
 	GIMSK |= _BV(5);		/*Turn on PCINT0  ok, actually this is a bug in their documentation. BUT that's ok. */ \
 	PORTA |= _BV(pin);		/*Enable weak pullup */ \
-	initialt1 = TCNT1; \
+	initialt1 = TCNT1; sei(); \
 	/*while( !(PINA & mask ) ); *//*XXX Tricky... bug in processor? SOMETIMES?  Can't use _BV(pin)! */ \
 	while( !(PINA & _BV(pin)) ); \
 	ret = TimerAtTrigger - initialt1; \

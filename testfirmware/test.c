@@ -22,7 +22,7 @@ TODO:
 #include "touch.h"
 
 //#define BRIDGE_MODE  //Uses a lot more power but is louder.
-//#define USE_SPI
+#define USE_SPI
 
 void delay_ms(uint32_t time) {
   uint32_t i;
@@ -86,29 +86,63 @@ int sfreq = 0;
 int sfoverride = 0;
 
 int  cpl;
-int mute;
+uint8_t mute;
 uint8_t Sine( uint16_t w ) { w>>=3; if( w & 0x100 ) return 255-(w&0xff); else return (w&0xff); }
 
 uint8_t nextocr1d;
 
 
-ISR( TIMER1_COMPD_vect )
+ISR( TIMER1_COMPD_vect, ISR_NAKED )
 {
+/*	if( !(nextocr1d & 0x80)  )
+	{
+		TouchNext();
+	} */
+	asm volatile ( "\n"
+"		push r0\n"
+"		in r0, 0x3f\n"
+"		push r0\n"
+"		push r24\n"
+"		lds r24, nextocr1d\n"
+"		sbrs r24, 7\n"
+"		rcall TouchNext\n"
+"		pop r24\n"
+"		pop r0\n"
+"		out 0x3f, r0\n"
+"		pop r0\n"
+"		reti\n" );
 }
 
-ISR( TIMER1_OVF_vect )
+ISR( TIMER1_OVF_vect, ISR_NAKED )
 {
+	asm volatile ( "\n"
+"		push r0\n"
+"		in r0, 0x3f\n"
+"		push r0\n"
+"		push r24\n"
+"		push r25\n" );
 	OCR1D = nextocr1d;
-	if( mute ) { TouchNext(); return; }
-
+	if( nextocr1d & 0x80 )
+	{
+		TouchNext();
+	}
+	//if( mute ) { TouchNext(); return; }
+	//goto cleanup;
 	//sei();
 	
 	static int ticktime = 0;
 	ticktime = 0;
 	cpl+=sfreq;  //64 = 4 per, @ 8kHz so SPS is 32kSPS
 	nextocr1d = Sine( cpl );
-	//nextocr1d++; //Sine( cpl );
-	//if( nextocr1d > 160 ) nextocr1d = 80;
+
+cleanup:
+	asm volatile( "\n"
+"		pop r25\n"
+"		pop r24\n"
+"		pop r0\n"
+"		out 0x3f, r0\n"
+"		pop r0\n"
+"		reti\n" );
 
 }
 
@@ -135,12 +169,6 @@ int main()
 
 
 	DDRB |= 3;  //LEDs output
-	
-	//Pullup bits for inputs.
-	DDRB &= ~( _BV(2) | _BV(3) | _BV(6) );
-	DDRA &= ~( _BV(0) | _BV(1) | _BV(2) | _BV(3) | _BV(4) );
-	PORTB |= _BV(2) | _BV(3) | _BV(6);
-	PORTA |= _BV(0) | _BV(1) | _BV(2) | _BV(3) | _BV(4);
 
 	//Timer 1 was mostly used for the speaker.
 	DDRB |= _BV(4) | _BV(5); //speaker.  
@@ -156,6 +184,7 @@ int main()
 	TCCR1D = 0;
 	OCR1C = 0xff;  //Set top
 	OCR1D = 0x00;
+
 
 //	PLLCSR = _BV(PCKE) | _BV(PLLE); //Enable PLL - makes max speed 263.7kHz.  WARNING: Adds ~4mA.
 	PLLCSR = 0; //Don't use PLL. - max speed 33.35kHz
@@ -183,7 +212,7 @@ int main()
 #endif
 
 //Debug for checking to see if touch is working in the synchronized manner.
-#if 0
+#if 1
 #ifdef USE_SPI
 	while(1)
 	{
@@ -195,7 +224,13 @@ int main()
 		sendhex2( touchvals[2] );
 		sendchr( ',' );
 		sendhex2( TCNT1 );
+		sendchr( ',' );
+		sendhex2( OCR1D );
 		sendstr( "\n" ); 
+		if( sfreq == 238 )
+		sfreq = 159;
+		else
+		sfreq = 238;
 	}
 #endif
 #endif
@@ -207,6 +242,15 @@ int main()
 	cli();
 	sleep_enable();
 	sei();
+
+
+	
+	//Pullup bits for inputs.
+	DDRB &= ~( _BV(2) | _BV(3) | _BV(6) );
+	DDRA &= ~( _BV(0) | _BV(1) | _BV(2) | _BV(3) | _BV(4) );
+	PORTB |= _BV(2) | _BV(3) | _BV(6);
+	PORTA |= _BV(0) | _BV(1) | _BV(2) | _BV(3) | _BV(4);
+
 
 
 	uint8_t buttons;
@@ -323,9 +367,11 @@ int main()
 		}
 */
 
+/*
 		sleep_enable();
 		sleep_cpu();
 		sleep_disable();
+*/
 	}
 }
 

@@ -3,7 +3,7 @@ all : test.hex burn
 PART=attiny861
 PROGPART=t861
 
-CFLAGS=-g -Os -mmcu=$(PART) -DF_CPU=8000000UL -flto
+CFLAGS=-g -Os -mmcu=$(PART) -DF_CPU=8000000UL 
 CC=avr-gcc
 
 test.elf : test.c backend.S touch.c
