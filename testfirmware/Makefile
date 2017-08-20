@@ -3,10 +3,10 @@ all : test.hex burn
 PART=attiny861
 PROGPART=t861
 
-CFLAGS=-g -Os -mmcu=$(PART) -DF_CPU=8000000UL
+CFLAGS=-g -Os -mmcu=$(PART) -DF_CPU=8000000UL -flto
 CC=avr-gcc
 
-test.elf : test.o
+test.elf : test.c backend.S touch.c
 	avr-gcc -I $(CFLAGS) -mmcu=$(PART) -Wl,-Map,test.map -o $@ $^ -L/usr/lib/binutils/avr/2.18
 	avr-objdump -S test.elf > test.lst
 
