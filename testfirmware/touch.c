@@ -41,23 +41,31 @@ ISR( PCINT_vect )
 
 
 volatile uint8_t touchvals[3];
+volatile uint8_t filt_touchvals[3];
 uint8_t curtouch = 5;
 
 void TouchNext()
 {
+	uint8_t k;
 	if( curtouch == 5 )
 	{
-		touchvals[0] = TouchTest5();
+		touchvals[0] = k = TouchTest5();
+		if( k > filt_touchvals[0] ) filt_touchvals[0]++;
+		if( k < filt_touchvals[0] ) filt_touchvals[0]--;
 		curtouch = 6;
 	}
 	else if( curtouch == 6 )
 	{
-		touchvals[1] = TouchTest6();
+		touchvals[1] = k = TouchTest6();
+		if( k > filt_touchvals[1] ) filt_touchvals[1]++;
+		if( k < filt_touchvals[1] ) filt_touchvals[1]--;
 		curtouch = 7;
 	}
 	else
 	{
-		touchvals[2] = TouchTest7();
+		touchvals[2]  = k = TouchTest7();
+		if( k > filt_touchvals[2] ) filt_touchvals[2]++;
+		if( k < filt_touchvals[2] ) filt_touchvals[2]--;
 		curtouch = 5;
 	}
 }
@@ -117,18 +125,14 @@ TTGEN(7);
 
 
 
-
-
-
-
 void CalcTouch()
 {
 	uint8_t maximumtouch = 0;
 	uint8_t angle = 0;
 
-	uint8_t s1 = (int8_t)touchvals[0] - 0x10;
-	uint8_t s2 = (int8_t)touchvals[1] - 0x10;
-	uint8_t s3 = (int8_t)touchvals[2] - 0x10;
+	uint8_t s1 = (int8_t)filt_touchvals[0] - CAL_BASELINE;
+	uint8_t s2 = (int8_t)filt_touchvals[1] - CAL_BASELINE;
+	uint8_t s3 = (int8_t)filt_touchvals[2] - CAL_BASELINE;
 
 	if( s1 < s2 && s1 < s3 )
 	{

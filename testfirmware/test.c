@@ -22,7 +22,8 @@ TODO:
 #include "touch.h"
 
 //#define BRIDGE_MODE  //Uses a lot more power but is louder.
-#define USE_SPI
+//#define USE_SPI
+#define USE_GPIOR0   //Uses the General Purpose IO Register for state-base stuff.  This helps with speed and memory usage as well as register overhead in interrupts.
 
 void delay_ms(uint32_t time) {
   uint32_t i;
@@ -86,11 +87,29 @@ int sfreq = 0;
 int sfoverride = 0;
 
 int  cpl;
-uint8_t mute;
+
+#ifdef USE_GPIOR0
+#define SET_MUTE        {GPIOR0|=_BV(0);}
+#define CLEAR_MUTE      {GPIOR0&=~_BV(0);}
+#define GET_MUTE        (GPIOR0&_BV(0))
+#define SET_WASMUTE     {GPIOR0|=_BV(1);}
+#define CLEAR_WASMUTE   {GPIOR0&=~_BV(1);}
+#define GET_WASMUTE     (GPIOR0&_BV(1))
+#else
+volatile uint8_t mute, wasmute;
+#define SET_MUTE  { mute = 1; }
+#define CLEAR_MUTE { mute = 0; }
+#define GET_MUTE  (mute)
+#define SET_WASMUTE     {wasmute = 1;}
+#define CLEAR_WASMUTE   {wasmute = 0;}
+#define GET_WASMUTE     (wasmute)
+#endif
+
 uint8_t Sine( uint16_t w ) { w>>=3; if( w & 0x100 ) return 255-(w&0xff); else return (w&0xff); }
 
 uint8_t nextocr1d;
 uint8_t ocronread;
+uint16_t samples;
 
 ISR( TIMER1_OVF_vect, ISR_NAKED )
 {
@@ -98,41 +117,64 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 "		push r0\n"
 "		in r0, 0x3f\n"
 "		push r0\n"
-"		push r18\n"
-"		push r19\n"
 "		push r24\n"
-"		push r25\n"
-"		push r28\n" );
-	uint8_t do_at_end = 0;
+"		push r25\n" );
+
 	OCR1D = nextocr1d;
-	if( (OCR1D & 0x80) )  //Cannot safely operate unless the next is far enough out.
+	if( OCR1D & 0x80 )  //Cannot safely operate unless the next is far enough out.
 	{
 		ocronread = OCR1D;
 		TouchNext();
 	}
 
+	samples++;
 
-	if( mute )
+	if( GET_MUTE )
 	{
-		if( nextocr1d == 0 )
+		if( GET_WASMUTE )
+		{
 			TouchNext();
-		nextocr1d = 0;
+		}
+		else
+		{
+			nextocr1d = 0;
+			SET_WASMUTE
+			TCCR1C = 0; //Actually disable PWM
+			TCCR1E = 0; 
+		}
 	}
 	else
 	{
-		static int ticktime = 0;
-		ticktime = 0;
+		if( GET_WASMUTE )
+		{
+			//Re-enable the PWM
+			#ifdef BRIDGE_MODE
+				TCCR1C = _BV(PWM1D) | _BV(COM1D0);
+				TCCR1E =  _BV(5) | _BV(4); // | _BV(4); No /OC1D.  We don't want to do a full autobridge because we don't have an inductor on the speaker.
+			#else
+				TCCR1C = _BV(PWM1D) | _BV(COM1D1);
+				TCCR1E =  _BV(5); // | _BV(4); No /OC1D.  We don't want to do a full autobridge because we don't have an inductor on the speaker.
+			#endif
+			CLEAR_WASMUTE
+		}
+
+asm volatile( 
+"		push r18\n"
+"		push r19\n" );
+
+		//XXX Do awesome synth stuff here.
 		cpl+=sfreq;  //64 = 4 per, @ 8kHz so SPS is 32kSPS
 		nextocr1d = Sine( cpl );
+
+asm volatile( 
+"		pop r19\n"
+"		pop r18\n" );
 	}
 
 cleanup:
 	asm volatile( "\n"
-"		pop r28\n"
 "		pop r25\n"
 "		pop r24\n"
-"		pop r19\n"
-"		pop r18\n"
 "		pop r0\n"
 "		out 0x3f, r0\n"
 "		pop r0\n"
@@ -186,50 +228,6 @@ int main()
 
 //	sfreq = 150;
 
-//Debug for checking to see if touch is working at all.
-#if 0
-#ifdef USE_SPI
-	TIMSK = 0;
-	TCCR1C = 0;
-	TCCR1E = 0; //Disable PWM
-	sendstr( "!!!!" );
-	while(1)
-	{
-		sendhex2( TouchTest5(_BV(5)) );
-		sendchr( ',' );
-		sendhex2( TouchTest6(_BV(6)) );
-		sendchr( ',' );
-		sendhex2( TouchTest7(_BV(7)) );
-		sendstr( "\n" );
-	}
-#endif
-#endif
-
-//Debug for checking to see if touch is working in the synchronized manner.
-#if 0
-#ifdef USE_SPI
-	while(1)
-	{
-
-		sendhex2( touchvals[0] );
-		sendchr( ',' );
-		sendhex2( touchvals[1] );
-		sendchr( ',' );
-		sendhex2( touchvals[2] );
-		sendchr( ',' );
-		sendhex2( TCNT1 );
-		sendchr( ',' );
-		sendhex2( OCR1D );
-		sendstr( "\n" ); 
-		if( sfreq == 238 )
-		sfreq = 159;
-		else
-		sfreq = 238;
-	}
-#endif
-#endif
-
-
 	set_sleep_mode(SLEEP_MODE_IDLE);
 	//set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	//set_sleep_mode(SLEEP_MODE_ADC);
@@ -252,9 +250,13 @@ int main()
 	{
 		//buttons++;
 		buttons = ~( (PINA&0x1f) | ((PINB & _BV(2)) << 3) | ((PINB & _BV(3))<<3) | ((PINB&_BV(6))<<1));
+#ifdef USE_SPI
 		buttons &= 0x0f;
+#endif
 		if( buttons & 0x02 ) { PORTB |= _BV(1); } else { PORTB &= ~_BV(1); }
 		if( buttons & 0x01 ) { PORTB |= _BV(0); } else { PORTB &= ~_BV(0); }
+
+		sleep_cpu();
 
 		if( sfoverride ) sfreq = sfoverride;
 		else if( buttons & 1 ) sfreq = 159;
@@ -267,42 +269,90 @@ int main()
 		else if( buttons & 128 ) sfreq = 424;
 		else sfreq = 0;
 
-		if( sfreq == 0 ) mute = 1; else mute = 0;
-
-
-/*		if( s1 > 5)
-			sfoverride = 150;
-		else if( s2 > 5 )
-			sfoverride = 160;
-		else if( s3 > 5 )
-			sfoverride = 170;
+		if( sfreq == 0 )
+			SET_MUTE
 		else
-			sfoverride = 0;
+			CLEAR_MUTE
 
-		cli();
-		s1 = touchvals[0]; s2 = ocronread;
-		sei();
-		sendhex2( s1 );
-		sendhex2( s2 );
-		sendchr( '\n' );
-
-*/
-		CalcTouch();
-
-		if( calced_amplitude > 4 )
-		{
-			sfoverride = 180 + calced_angle;
-		}
-		else
-		{
-			sfoverride = 0;
-		}
-
-/*
-		sleep_enable();
 		sleep_cpu();
-		sleep_disable();
-*/
+
+		CalcTouch();  //Calculates amplitude and angle of button press.
+
+		sleep_cpu();
+
+		if( ( calced_amplitude > 3 && sfoverride ) || ( calced_amplitude > 7 ) ) //This provides a little debouncing.  >5 to start, if already started, needs to maintain >3
+		{
+			sfoverride = 100 + calced_angle;
+		}
+		else
+		{
+			sfoverride = 0;
+		}
+
+		sleep_cpu();
+
+		//Ring check
+		{
+			static uint8_t ringstate;
+			static uint8_t last_ring_place;
+			static uint8_t ringaccum;
+			uint8_t trigger_ring = 0;
+
+			if( buttons == 0 )
+			{
+				if( calced_amplitude > 3 )
+				{
+					if( ringstate == 0 )
+					{
+						last_ring_place = calced_angle;
+						ringaccum = 0;
+						ringstate = 1;
+					}
+					else
+					{
+						int16_t delta = (int16_t)calced_angle - (int16_t)last_ring_place;
+						if( delta > 90 ) delta -= 180;
+						if( delta <-90 ) delta += 180; //Handle wrap-around.
+						ringaccum += delta;
+						if( ringaccum > 230 ) ringaccum = 0;
+						if( ringaccum > 180 ) { trigger_ring = 1; ringaccum -= 180; }
+						last_ring_place = calced_angle;
+					}
+				}
+				else
+				{
+					ringstate = 0;
+				}
+				
+			}
+			else
+			{
+				ringstate = 0;
+			}
+
+
+			static uint8_t play_ring_state = 0;
+			static uint16_t ring_start_time = 0;
+			if( trigger_ring )
+			{
+				play_ring_state = 1;
+				ring_start_time = samples;
+			}
+			if( play_ring_state )
+			{
+				int16_t difftime = ( samples - ring_start_time );
+				if( difftime < 15000 )
+				{
+					//XXX Do a coin sound here.
+					sfoverride = ((difftime>>7)&0xf0) + 300;
+				}
+				else
+				{
+					play_ring_state = 0;
+				}
+			}
+		}
+		
 	}
 }
 
