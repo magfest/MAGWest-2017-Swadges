@@ -88,22 +88,15 @@ int sfoverride = 0;
 
 int  cpl;
 
-#ifdef USE_GPIOR0
+
 #define SET_MUTE        {GPIOR0|=_BV(0);}
 #define CLEAR_MUTE      {GPIOR0&=~_BV(0);}
 #define GET_MUTE        (GPIOR0&_BV(0))
 #define SET_WASMUTE     {GPIOR0|=_BV(1);}
 #define CLEAR_WASMUTE   {GPIOR0&=~_BV(1);}
 #define GET_WASMUTE     (GPIOR0&_BV(1))
-#else
-volatile uint8_t mute, wasmute;
-#define SET_MUTE  { mute = 1; }
-#define CLEAR_MUTE { mute = 0; }
-#define GET_MUTE  (mute)
-#define SET_WASMUTE     {wasmute = 1;}
-#define CLEAR_WASMUTE   {wasmute = 0;}
-#define GET_WASMUTE     (wasmute)
-#endif
+#define  LASTBUTTONS     GPIOR1
+
 
 uint8_t Sine( uint16_t w ) { w>>=3; if( w & 0x100 ) return 255-(w&0xff); else return (w&0xff); }
 
@@ -133,13 +126,15 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 	{
 		if( GET_WASMUTE )
 		{
-			TouchNext();
+			CLKPR = 0x80; CLKPR = 0x00; //Set speed of processor to 8 MHz
+			TouchNext();  //We have to execute this at full speed.
+			CLKPR = 0x80; CLKPR = 0x04; //Set speed of processor to 1 MHz (Saving power)
 		}
 		else
 		{
 			nextocr1d = 0;
 			SET_WASMUTE
-			TCCR1C = 0; //Actually disable PWM
+			TCCR1C = 0; //Disable the PWM (this saves power)
 			TCCR1E = 0; 
 		}
 	}
@@ -149,13 +144,13 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 		{
 			//Re-enable the PWM
 			#ifdef BRIDGE_MODE
-				TCCR1C = _BV(PWM1D) | _BV(COM1D0);
-				TCCR1E =  _BV(5) | _BV(4); // | _BV(4); No /OC1D.  We don't want to do a full autobridge because we don't have an inductor on the speaker.
+				TCCR1C = _BV(PWM1D) | _BV(COM1D0); TCCR1E =  _BV(5) | _BV(4);  //Enable bridge output
 			#else
-				TCCR1C = _BV(PWM1D) | _BV(COM1D1);
-				TCCR1E =  _BV(5); // | _BV(4); No /OC1D.  We don't want to do a full autobridge because we don't have an inductor on the speaker.
+				TCCR1C = _BV(PWM1D) | _BV(COM1D1); TCCR1E =  _BV(5);  //Enable regular output.
 			#endif
 			CLEAR_WASMUTE
+
+			CLKPR = 0x80; CLKPR = 0x00; //Set speed of processor to 8 MHz
 		}
 
 asm volatile( 
@@ -243,30 +238,27 @@ int main()
 	PORTB |= _BV(2) | _BV(3) | _BV(6);
 	PORTA |= _BV(0) | _BV(1) | _BV(2) | _BV(3) | _BV(4);
 
-
-
-	uint8_t buttons;
 	while(1)
 	{
 		//buttons++;
-		buttons = ~( (PINA&0x1f) | ((PINB & _BV(2)) << 3) | ((PINB & _BV(3))<<3) | ((PINB&_BV(6))<<1));
+		LASTBUTTONS = ~( (PINA&0x1f) | ((PINB & _BV(2)) << 3) | ((PINB & _BV(3))<<3) | ((PINB&_BV(6))<<1));
 #ifdef USE_SPI
-		buttons &= 0x0f;
+		LASTBUTTONS &= 0x9f;
 #endif
-		if( buttons & 0x02 ) { PORTB |= _BV(1); } else { PORTB &= ~_BV(1); }
-		if( buttons & 0x01 ) { PORTB |= _BV(0); } else { PORTB &= ~_BV(0); }
+		if( LASTBUTTONS & 0x02 ) { PORTB |= _BV(1); } else { PORTB &= ~_BV(1); }
+		if( LASTBUTTONS & 0x01 ) { PORTB |= _BV(0); } else { PORTB &= ~_BV(0); }
 
 		sleep_cpu();
 
 		if( sfoverride ) sfreq = sfoverride;
-		else if( buttons & 1 ) sfreq = 159;
-		else if( buttons & 2 ) sfreq = 178;
-		else if( buttons & 4 ) sfreq = 212;
-		else if( buttons & 8 ) sfreq = 238;
-		else if( buttons & 16 ) sfreq = 283;
-		else if( buttons & 32 ) sfreq = 317;
-		else if( buttons & 64 ) sfreq = 357;
-		else if( buttons & 128 ) sfreq = 424;
+		else if( LASTBUTTONS & 1 ) sfreq = 159;
+		else if( LASTBUTTONS & 2 ) sfreq = 178;
+		else if( LASTBUTTONS & 4 ) sfreq = 212;
+		else if( LASTBUTTONS & 8 ) sfreq = 238;
+		else if( LASTBUTTONS & 16 ) sfreq = 283;
+		else if( LASTBUTTONS & 32 ) sfreq = 317;
+		else if( LASTBUTTONS & 64 ) sfreq = 357;
+		else if( LASTBUTTONS & 128 ) sfreq = 424;
 		else sfreq = 0;
 
 		if( sfreq == 0 )
@@ -298,7 +290,7 @@ int main()
 			static uint8_t ringaccum;
 			uint8_t trigger_ring = 0;
 
-			if( buttons == 0 )
+			if( LASTBUTTONS == 0 )
 			{
 				if( calced_amplitude > 3 )
 				{
@@ -314,6 +306,7 @@ int main()
 						if( delta > 90 ) delta -= 180;
 						if( delta <-90 ) delta += 180; //Handle wrap-around.
 						ringaccum += delta;
+						//sendhex2( ringaccum ); sendchr( '\n' );
 						if( ringaccum > 230 ) ringaccum = 0;
 						if( ringaccum > 180 ) { trigger_ring = 1; ringaccum -= 180; }
 						last_ring_place = calced_angle;

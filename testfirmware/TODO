@@ -1,3 +1,2 @@
-1) Try basing the time decision for touch reading off of TCCR1D instead of the next tcr value.
-2) Why does the system sometimes get /stuck/?
-3) If value from test touch < 0x10, the data is bogus and should be ignored.
+(1) If there is logic that _must_ happen at a regular interval, it can be added to new states in TouchNext() which happens almost ever single sample.
+
