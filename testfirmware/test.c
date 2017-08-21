@@ -101,7 +101,6 @@ int  cpl;
 uint8_t Sine( uint16_t w ) { w>>=3; if( w & 0x100 ) return 255-(w&0xff); else return (w&0xff); }
 
 uint8_t nextocr1d;
-uint8_t ocronread;
 uint16_t samples;
 
 ISR( TIMER1_OVF_vect, ISR_NAKED )
@@ -116,8 +115,7 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 	OCR1D = nextocr1d;
 	if( OCR1D & 0x80 )  //Cannot safely operate unless the next is far enough out.
 	{
-		ocronread = OCR1D;
-		TouchNext();
+		TouchNext();  //Yes,this means this won't be called all the time, only when the PWM flip happens far enough out that it won't interfere with the touch button measuring.
 	}
 
 	samples++;
