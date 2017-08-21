@@ -13,8 +13,14 @@ uint8_t TouchTest7();
 
 extern volatile uint8_t touchvals[3];
 
+extern uint8_t calced_angle;  //In 2* degree increments, 0-180 = one circle.
+extern int8_t calced_amplitude;
+
 //Perform next logical touch step.
 void TouchNext();
+
+//Don't execute from within interrupt.  Uses touch information to calculate the calced angle and volume.
+void CalcTouch();
 
 #endif
 #endif

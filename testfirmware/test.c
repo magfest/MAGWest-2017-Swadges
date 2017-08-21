@@ -22,7 +22,7 @@ TODO:
 #include "touch.h"
 
 //#define BRIDGE_MODE  //Uses a lot more power but is louder.
-//#define USE_SPI
+#define USE_SPI
 
 void delay_ms(uint32_t time) {
   uint32_t i;
@@ -90,7 +90,7 @@ uint8_t mute;
 uint8_t Sine( uint16_t w ) { w>>=3; if( w & 0x100 ) return 255-(w&0xff); else return (w&0xff); }
 
 uint8_t nextocr1d;
-
+uint8_t ocronread;
 
 ISR( TIMER1_OVF_vect, ISR_NAKED )
 {
@@ -98,27 +98,41 @@ ISR( TIMER1_OVF_vect, ISR_NAKED )
 "		push r0\n"
 "		in r0, 0x3f\n"
 "		push r0\n"
+"		push r18\n"
+"		push r19\n"
 "		push r24\n"
-"		push r25\n" );
+"		push r25\n"
+"		push r28\n" );
+	uint8_t do_at_end = 0;
 	OCR1D = nextocr1d;
-	if( mute || (OCR1D & 0x80) )  //Cannot safely operate unless the next is far enough out.
+	if( (OCR1D & 0x80) )  //Cannot safely operate unless the next is far enough out.
 	{
+		ocronread = OCR1D;
 		TouchNext();
 	}
 
-	//if( mute ) { TouchNext(); return; }
-	//goto cleanup;
-	//sei();
-	
-	static int ticktime = 0;
-	ticktime = 0;
-	cpl+=sfreq;  //64 = 4 per, @ 8kHz so SPS is 32kSPS
-	nextocr1d = Sine( cpl );
+
+	if( mute )
+	{
+		if( nextocr1d == 0 )
+			TouchNext();
+		nextocr1d = 0;
+	}
+	else
+	{
+		static int ticktime = 0;
+		ticktime = 0;
+		cpl+=sfreq;  //64 = 4 per, @ 8kHz so SPS is 32kSPS
+		nextocr1d = Sine( cpl );
+	}
 
 cleanup:
 	asm volatile( "\n"
+"		pop r28\n"
 "		pop r25\n"
 "		pop r24\n"
+"		pop r19\n"
+"		pop r18\n"
 "		pop r0\n"
 "		out 0x3f, r0\n"
 "		pop r0\n"
@@ -238,6 +252,7 @@ int main()
 	{
 		//buttons++;
 		buttons = ~( (PINA&0x1f) | ((PINB & _BV(2)) << 3) | ((PINB & _BV(3))<<3) | ((PINB&_BV(6))<<1));
+		buttons &= 0x0f;
 		if( buttons & 0x02 ) { PORTB |= _BV(1); } else { PORTB &= ~_BV(1); }
 		if( buttons & 0x01 ) { PORTB |= _BV(0); } else { PORTB &= ~_BV(0); }
 
@@ -254,11 +269,8 @@ int main()
 
 		if( sfreq == 0 ) mute = 1; else mute = 0;
 
-		s1 = (int8_t)touchvals[0] - 0x10;
-		s2 = (int8_t)touchvals[1] - 0x10;
-		s3 = (int8_t)touchvals[2] - 0x10;
 
-		if( s1 > 5)
+/*		if( s1 > 5)
 			sfoverride = 150;
 		else if( s2 > 5 )
 			sfoverride = 160;
@@ -267,73 +279,25 @@ int main()
 		else
 			sfoverride = 0;
 
+		cli();
+		s1 = touchvals[0]; s2 = ocronread;
+		sei();
+		sendhex2( s1 );
+		sendhex2( s2 );
+		sendchr( '\n' );
 
-/*
-		
-		int maximumtouch = 0;
-		int angle = 0;
+*/
+		CalcTouch();
 
-		if( s1 < s2 && s1 < s3 )
+		if( calced_amplitude > 4 )
 		{
-			//S1 is minimum (baseline)
-			s2 -= s1;
-			s3 -= s1;
-
-			//Compare S2/S3
-			if( s2 > s3 )
-			{
-				//S2 is max.
-				maximumtouch = s2;
-				angle = 0 + (30 * (int16_t)s3) / s2;
-			}
-			else
-			{
-				//S3 is max.
-				maximumtouch = s3;
-				angle = 30 + (30 * (int16_t)s2) / s3;
-			}
-		}
-		else if( s2 < s3 )
-		{
-			s1 -= s2;
-			s3 -= s2;
-			if( s1 > s3 )
-			{
-				maximumtouch = s1;
-				angle = 60 + (30 * (int16_t)s3) / s1;
-			}
-			else
-			{
-				maximumtouch = s3;
-				angle = 90 + (30 * (int16_t)s1) / s3;
-			}
-
-		}
-		else
-		{
-			s2 -= s3;
-			s1 -= s3;
-			if( s1 > s2 )
-			{
-				maximumtouch = s1;
-				angle = 60 + (30 * (int16_t)s2) / s1;
-			}
-			else
-			{
-				maximumtouch = s2;
-				angle = 90 + (30 * (int16_t)s1) / s2;
-			}
-		}
-
-		if( maximumtouch > 4 )
-		{
-			sfoverride = 180 + angle;
+			sfoverride = 180 + calced_angle;
 		}
 		else
 		{
 			sfoverride = 0;
 		}
-*/
+
 /*
 		sleep_enable();
 		sleep_cpu();

@@ -3,6 +3,8 @@
 #include "touch.h"
 
 volatile unsigned char TimerAtTrigger;
+uint8_t calced_angle;
+int8_t calced_amplitude;
 
 //";		push r0 \n"
 //";		in	r0, 0x3f\n" //Backup SREG
@@ -116,3 +118,69 @@ TTGEN(7);
 
 
 
+
+
+
+void CalcTouch()
+{
+	uint8_t maximumtouch = 0;
+	uint8_t angle = 0;
+
+	uint8_t s1 = (int8_t)touchvals[0] - 0x10;
+	uint8_t s2 = (int8_t)touchvals[1] - 0x10;
+	uint8_t s3 = (int8_t)touchvals[2] - 0x10;
+
+	if( s1 < s2 && s1 < s3 )
+	{
+		//S1 is minimum (baseline)
+		s2 -= s1;
+		s3 -= s1;
+
+		//Compare S2/S3
+		if( s2 > s3 )
+		{
+			//S2 is max.
+			maximumtouch = s2;
+			angle = 30 + (30 * (int16_t)s3) / s2;   //Starts at 2 o'clock
+		}
+		else
+		{
+			//S3 is max.
+			maximumtouch = s3;
+			angle = 90 - (30 * (int16_t)s2) / s3;  //Starts around 4 o'clock.
+		}
+	}
+	else if( s2 < s3 )
+	{
+		s1 -= s2;
+		s3 -= s2;
+		if( s1 > s3 )
+		{
+			maximumtouch = s1;
+			angle = 150 - (30 * (int16_t)s3) / s1;
+		}
+		else
+		{
+			maximumtouch = s3;
+			angle = 90 + (30 * (int16_t)s1) / s3;
+		}
+
+	}
+	else
+	{
+		s2 -= s3;
+		s1 -= s3;
+		if( s1 > s2 )
+		{
+			maximumtouch = s1;
+			angle = 150 + (30 * (int16_t)s2) / s1;
+		}
+		else
+		{
+			maximumtouch = s2;
+			angle = 30 - (30 * (int16_t)s1) / s2;   //STARTS at 12 O'clock
+		}
+	}
+	calced_angle = angle;
+	calced_amplitude = maximumtouch;
+}
